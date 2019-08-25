@@ -34,7 +34,7 @@ Need to prepare a rich data set of NBA
     
     Misleading example: a plot with improper scale
 
-  - The H - ggplot2 in R - general introduction of ggplot2 and its
+  - How - ggplot2 in R - general introduction of ggplot2 and its
     advantages comparing with base plot in R
 
 # 2\. Introduction to GGPLOT2 (1h and 20 min)
