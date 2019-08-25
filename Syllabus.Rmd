@@ -17,7 +17,7 @@ The objectives of the workshop:
   
 Need to prepare a rich data set of NBA
 
-# 1. 4W's and the H (20 min)
+# 1. 4W's and the H of data visualization (20 min)
 
 * Who: Statistician, Data Scientist, Data Analyst...
 
@@ -35,7 +35,7 @@ Need to prepare a rich data set of NBA
   
   Misleading example: a plot with improper scale
 
-* The H - ggplot2 in R - general introduction of ggplot2 and its advantages comparing with base plot in R
+* How - ggplot2 in R - general introduction of ggplot2 and its advantages comparing with base plot in R
 
 # 2. Introduction to GGPLOT2 (1h and 20 min)
 
@@ -63,7 +63,7 @@ Need to prepare a rich data set of NBA
 
 * Introduce ggplot2 cheat sheet and give some simple practices
 
-# 2.2 Two case studies (35 min)
+## 2.2 Two case studies (35 min)
 
 * Introduce the basketball game data set (5 min)
 
