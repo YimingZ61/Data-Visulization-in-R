@@ -15,7 +15,7 @@ The objectives of the workshop:
 
 Need to prepare a rich data set of NBA
 
-# 1\. 4W’s and the H (20 min)
+# 1\. 4W’s and the H of data visualization (20 min)
 
   - Who: Statistician, Data Scientist, Data Analyst…
 
