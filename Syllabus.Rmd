@@ -1,6 +1,6 @@
 ---
 title: "Data Visualization in R - Syllabus"
-output: html_document
+output: rmarkdown::github_document
 author: Yiming Zhang
 ---
 
