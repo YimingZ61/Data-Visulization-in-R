@@ -64,7 +64,7 @@ Need to prepare a rich data set of NBA
 
   - Introduce ggplot2 cheat sheet and give some simple practices
 
-# 2.2 Two case studies (35 min)
+## 2.2 Two case studies (35 min)
 
   - Introduce the basketball game data set (5 min)
 
