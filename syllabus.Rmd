@@ -2,6 +2,7 @@
 title: "Data Visualization in R - Syllabus"
 output: rmarkdown::github_document
 author: Yiming Zhang
+date: "`r Sys.Date()`"
 ---
 
 
