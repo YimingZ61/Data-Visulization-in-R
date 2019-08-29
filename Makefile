@@ -1,6 +1,9 @@
-syllabus.html: syllabus.Rmd
-	Rscript -e 'rmarkdown::render("syllabus.Rmd")'
+HTML_FILES=syllabus.html
 
+all: $(HTML_FILES)
 
-clean:
-	rm syllabus.md syllabus.html
+clean: 
+	rm -f $(HTML_FILES) 
+
+%.html: %.Rmd
+	Rscript -e 'rmarkdown::render("$<")'
