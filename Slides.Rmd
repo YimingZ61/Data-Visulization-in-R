@@ -1,0 +1,86 @@
+---
+title: "Data Visulization in R"
+author: "Yiming Zhang"
+date: "9/7/2019"
+output: ioslides_presentation
+widescreen: true
+smaller: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+## Load packages
+library(ggplot2)
+library(ggrepel)
+
+## Read data
+nba.data <- read.csv("NBA_Team_Data.csv")
+
+## Draw
+p1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
+  geom_point(aes(size = WIN., color = REGION),
+             shape = 1) + 
+  geom_text(aes(label = ABV), size = 1.5) +
+  facet_wrap(~SEASON) +
+  theme_bw() +
+  scale_y_continuous(limits = c(97, 120))
+```
+
+## Outline
+
+## Introduction to the data set
+
+## 4W’s and the H of data visualization - Who
+
+## 4W’s and the H of data visualization - When
+
+## 4W’s and the H of data visualization - What
+
+## 4W’s and the H of data visualization - Why
+
+## What information can we get from this plot?
+
+## But "bad" plots may....
+
+## What's the issue in this plot?
+
+## What's the issue in this plot?
+
+## What's the issue in this plot?
+
+## 4W’s and the H of data visualization - How
+
+## Basic graphical package in R
+
+## The `plot` function 
+
+## Why ggplot2?
+
+## An example of ggplot2
+
+## Comparing with basic plot in R
+
+## Grammar of Graphics
+
+## Layers
+
+## data
+
+## aes
+
+## geom
+
+## facet
+
+## scale
+
+## theme
+
+## coord
+
+## ggplot2 cheat sheet
+
+## Practice
+
+
