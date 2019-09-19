@@ -1,13 +1,9 @@
-HTML_FILES=syllabus.html
-PDF_FILES=Slides.pdf
+HTML_FILES=syllabus.html Slides.html
 
-all: $(HTML_FILES) $(PDF_FILES)
+all: $(HTML_FILES) 
 
 clean: 
-	rm -f $(HTML_FILES) $(PDF_FILES)
+	rm -f $(HTML_FILES) 
 
 %.html: %.Rmd
 	Rscript -e 'rmarkdown::render("$<")'
-
-%.pdf: %.Rmd
-	Rscript -e "rmarkdown::render("$<")"
