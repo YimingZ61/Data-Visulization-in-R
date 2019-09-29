@@ -18,12 +18,40 @@ library(ggrepel)
 
 ## Read data
 nba.data <- read.csv("NBA_Team_Data.csv")
+nba.data <- nba.data[, -1]
 
+practice1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
+  geom_point(aes(color = REGION),
+             shape = 1) + 
+  geom_text(data = nba.data[which(nba.data$WIN. >= 0.6), ], aes(label = ABV), size = 2) +
+  geom_text(data = nba.data[which(nba.data$WIN. <= 0.3), ], aes(label = ABV), size = 1.5) +
+  facet_wrap(~SEASON) +
+  theme_bw() +
+  scale_y_reverse(limits = c(120, 97)) +
+  scale_color_manual(values = c("blue3", "red3")) +
+  theme()
 ```
+
 
 ## Outline
 
+- General introduction to data visualization
+
+- Introduction to ggplot2 in R
+
+- Practices with ggplot2
+
+- Introduction to the extension of ggplot2
+
+# General introduction to data visualization
+
+
+
 ## Introduction to the data set
+
+```{r}
+
+```
 
 ## 4W’s and the H of data visualization - Who
 
@@ -34,6 +62,10 @@ nba.data <- read.csv("NBA_Team_Data.csv")
 ## 4W’s and the H of data visualization - Why
 
 ## What information can we get from this plot?
+
+```{r}
+practice1
+```
 
 ## But "bad" plots may....
 
@@ -48,6 +80,8 @@ nba.data <- read.csv("NBA_Team_Data.csv")
 ## Basic graphical package in R
 
 ## The `plot` function 
+
+# Introduction to ggplot2
 
 ## ggplot2
 
@@ -253,38 +287,95 @@ p + facet_grid(REGION ~ SEASON, scales = "free")
 
 ## Scale
 
-## Scale: axis
+The scale functions control how the plot maps data values to the visual values of an aesthetic, for instance,
 
-## Scale: shape
+`scale_x_continuous`
+
+`scale_y_discrete`
+
+`scale_color_gradient`
+
+`scale_fill_manual`
+
+## Scale: General Purpose Scales
+
+- `scale_*_continuous`: change the scale for continuous data
+
+- `scale_*_discrete`: change the scale for discrete data
+
+- `scale_*_identity`: use values without scaling
+
+- `scale_*_manual`: create your own discrete scale
+
+## Scale: General Purpose Scales
+
+```{r, fig.show = "hold", out.width = "35%", fig.align='default', echo=TRUE, fig.height=3.5, fig.width=7}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN., color = REGION)) + 
+  geom_point()
+p + geom_point(); p + geom_line(); p + geom_density_2d(); p + geom_smooth(method = "lm")
+```
+
+## Scale: X and Y Axis
+
+## Scale: Color & Fill
+
+## Scale: Shape and Linetype
 
 ## Scale: linetype
 
-## Scale: color & fill
+## Theme {.smaller}
 
-## theme
+- We can change the theme of plot using `theme_*` function
 
-## coord
+```{r, fig.show = "hold", out.width = "35%", fig.align='default', echo=TRUE, fig.height=3.5, fig.width=7}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN.)) + 
+  geom_point() + geom_smooth(method = "lm")
+p + theme_bw(); p + theme_classic(); p + theme_grey(); p + theme_minimal()
+```
 
 ## ggplot2 cheat sheet
 
+- We don't need to memorize all the stuffs. The cheatsheet of ggplot2 gives us a tidy and detailed reference.
+
 https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
 
-## Practice
+- R help is also a great resource
+
+## Practice 1
 
 ```{r, fig.width=9, fig.height=5.5}
-ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
-  geom_point(aes(size = WIN., color = REGION),
-             shape = 1) + 
-  geom_text(data = nba.data[which(nba.data$WIN. >= 0.6), ], aes(label = ABV), size = 2) +
-  geom_text(data = nba.data[which(nba.data$WIN. <= 0.3), ], aes(label = ABV), size = 1.5) +
-  facet_wrap(~SEASON) +
-  theme_bw() +
-  scale_y_reverse(limits = c(120, 97)) +
-  scale_color_manual(values = c("skyblue3", "red3")) +
-  scale_size(range = c(1,8)) +
-  theme()
+practice1
 ```
 
+## Practice 2
+
+# Extentions of ggplot2
+
+## Extentions of ggplot2
+
+- GGally: An extention to reduce the complexity of combining geometric objects with transformed data
+
+- ggmap: Plot map based on the grammar of graphics
+
+- ggrepel: A convenient package for `geom_text()`
+
+- ggvis: Interactive plots based on grammar of graphics
+
+- gganimate: A grammar of animated graphics
+
+- more information: http://www.ggplot2-exts.org/gallery/
+
+## GGally
+
+## ggmap
+
+## ggrepel
+
+## ggvis
+
+# Other graphics packages in R
+
+## Common graphics package in R
 
 
-
+- Plotly: 
