@@ -18,7 +18,9 @@ library(ggrepel)
 
 ## Read data
 nba.data <- read.csv("NBA_Team_Data.csv")
-nba.data <- nba.data[, -1]
+nba.data <- nba.data[, c(2, 3, 7, 9, 30, 31, 42, 44, 45)]
+
+
 
 practice1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
   geom_point(aes(color = REGION),
@@ -30,6 +32,12 @@ practice1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
   scale_y_reverse(limits = c(120, 97)) +
   scale_color_manual(values = c("blue3", "red3")) +
   theme()
+
+ggplot() + 
+  geom_dotplot(data = nba.data, aes(x = REGION, y = WIN.), 
+               binaxis = "y", stackdir = "center") +
+  geom_boxplot(data = nba.data, aes(x = REGION, y = WIN.)) +
+  facet_wrap(~SEASON)
 ```
 
 
@@ -45,37 +53,98 @@ practice1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
 
 # General introduction to data visualization
 
+## When to visualize data
 
+- Exploratory data analysis
 
-## Introduction to the data set
+  + Explore pattern, trend, and distribution
+  
+  + Find correlation between variables
+  
+  + Regression analysis
+
+- Report statistical results
+
+- Communicate with non-statisticians
+
+  + Share findings
+
+  + Show fancy plots to your audiences
+
+## What to plot
+
+- One variable: Histogram, Bar chart, Density plot...
+
+- Two variables: Scatter plot, Box plot, Violin Plot...
+
+- Multiple variables: Heatmap...
+
+## Why we need data visualization
+
+- Better summary of statistics than table and text
+
+- A more interesting way to show your results
+
+## Introduction to the data set {.smaller}
+
+- All data are from http://stats.nba.com
 
 ```{r}
-
+head(nba.data)
 ```
 
-## 4W’s and the H of data visualization - Who
+- WIN.: Winning rate, which is the percentage of games played that a team has won.
 
-## 4W’s and the H of data visualization - When
+- PTS: The number of points scored.
 
-## 4W’s and the H of data visualization - What
+- OFFRTG: Offensive Rating, which measures a team's points scored per 100 possessions.
 
-## 4W’s and the H of data visualization - Why
+- DEFRTG: Defensive Rating, which is the number of points allowed per 100 possessions by a team.
+
+- PACE: Pace, which is the number of possessions per 48 minutes for a team.
+
+- REGION: East/West.
+
+- ABV: The abbreviation of a team.
 
 ## What information can we get from this plot?
 
-```{r}
-practice1
-```
+## What information can we get from this plot?
 
 ## But "bad" plots may....
 
-## What's the issue in this plot?
+- confuse people if labels and legends are not clear
+
+- be hard to read because of close color
+
+- deliver misleading information 
 
 ## What's the issue in this plot?
 
+```{r}
+ggplot(data = nba.data) + 
+  geom_histogram(aes(x = WIN., color = REGION)) +
+  scale_color_discrete("", )
+```
+
 ## What's the issue in this plot?
 
-## 4W’s and the H of data visualization - How
+```{r}
+ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) + 
+  geom_point() +
+  geom_smooth(method = "lm") + 
+  facet_wrap(~SEASON, scales = "free")
+```
+
+## How to visualize data in R?
+
+- `graphics`: The R basic graphics package
+
+- `ggplot2`: The grammar of graphics
+
+- `plotly`: Interactive plot in RShiny
+
+- `leaflet`: Interactive maps
 
 ## Basic graphical package in R
 
@@ -373,9 +442,6 @@ practice1
 
 ## ggvis
 
-# Other graphics packages in R
+## Reference
 
-## Common graphics package in R
-
-
-- Plotly: 
+# Thanks for listening!
