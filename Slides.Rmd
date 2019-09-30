@@ -19,6 +19,7 @@ library(ggrepel)
 ## Read data
 nba.data <- read.csv("NBA_Team_Data.csv")
 nba.data <- nba.data[, c(2, 3, 7, 9, 30, 31, 42, 44, 45)]
+mean.win <- aggregate(WIN. ~ SEASON + REGION, FUN = mean, data = nba.data)
 
 
 
@@ -124,8 +125,6 @@ head(nba.data)
 ## What's the issue in this plot?
 
 ```{r,  fig.width=8, fig.height = 5}
-mean.win <- aggregate(WIN. ~ SEASON + REGION, FUN = mean, data = nba.data)
-
 ggplot(data = mean.win, aes(x = SEASON, y = WIN., fill = REGION)) + 
   geom_bar(position = "dodge", stat = "identity", width = 0.5) +
   scale_fill_discrete("", labels = NULL)
@@ -342,9 +341,23 @@ ggplot(data = nba.data, aes(x = SEASON, y = WIN.)) +
   geom_violin()
 ```
 
+## Sometimes we need to transform the data set first
+
+- We need to transform the data set to keep consistent with the structure of the aesthetics.
+
+- For instance, if we want to compare the mean of winning rate between seasons and regions...
+
+```{r}
+mean.win <- aggregate(WIN. ~ SEASON + REGION, FUN = mean, data = nba.data)
+head(mean.win)
+```
+
 ## More options in `geom` function
 
-## Sometimes we need to transform the data set first
+```{r}
+
+```
+
 
 ## Facet {.smaller}
 
@@ -421,7 +434,19 @@ p + geom_point(); p + geom_line(); p + geom_density_2d(); p + geom_smooth(method
 
 ## Scale: X and Y Axis
 
-## Scale: Color & Fill
+## Scale: Color & Fill {.smaller}
+
+- General purpose scales also work for color and fill.
+
+- R color cheatsheet: https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/colorPaletteCheatsheet.pdf
+
+- Some scale functions designed to control the scale of color and fill, for instance,
+
+```{r, echo=TRUE, fig.height=3}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, color = WIN.)) + geom_point()
+p + scale_color_gradient(low = "green", high = "red")
+```
+
 
 ## Scale: Shape and Linetype
 
@@ -454,6 +479,10 @@ practice1
 ```
 
 ## Practice 2
+
+```{r, fig.width=9, fig.height=5.5}
+
+```
 
 # Extentions of ggplot2
 
