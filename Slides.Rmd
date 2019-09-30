@@ -113,27 +113,48 @@ head(nba.data)
 
 ## But "bad" plots may....
 
-- confuse people if labels and legends are not clear
+- be hard to read if labels and legends are not clear
 
-- be hard to read because of close color
+- be unfriendly to readers if it is too complicated
 
-- deliver misleading information 
+- confuse people if it is not well-designed
+
+- deliver misleading information (sometimes in purpose)
 
 ## What's the issue in this plot?
 
-```{r}
-ggplot(data = nba.data) + 
-  geom_histogram(aes(x = WIN., color = REGION)) +
-  scale_color_discrete("", )
+```{r,  fig.width=8, fig.height = 5}
+mean.win <- aggregate(WIN. ~ SEASON + REGION, FUN = mean, data = nba.data)
+
+ggplot(data = mean.win, aes(x = SEASON, y = WIN., fill = REGION)) + 
+  geom_bar(position = "dodge", stat = "identity", width = 0.5) +
+  scale_fill_discrete("", labels = NULL)
+```
+
+## Add labels for the legend and the y axis
+
+```{r,  fig.width=8, fig.height = 5}
+ggplot(data = mean.win, aes(x = SEASON, y = WIN., fill = REGION)) + 
+  geom_bar(position = "dodge", stat = "identity", width = 0.5) +
+  scale_y_continuous("Mean Winning Rate")
 ```
 
 ## What's the issue in this plot?
 
-```{r}
+```{r,  fig.width=8, fig.height = 5}
 ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) + 
   geom_point() +
   geom_smooth(method = "lm") + 
-  facet_wrap(~SEASON, scales = "free")
+  facet_wrap(REGION~SEASON, nrow = 2, scales = "free")
+```
+
+## Compare in the same scale
+
+```{r,  fig.width=8, fig.height = 5}
+ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) + 
+  geom_point() +
+  geom_smooth(method = "lm") + 
+  facet_grid(REGION~SEASON)
 ```
 
 ## How to visualize data in R?
@@ -157,7 +178,7 @@ ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
 - Grammar of graphic
 - Both quick and complex plot in an easy way
 - Nice aesthetic settings
-- Great docummentation and active mailing list 
+- Great docummentation and tons of instructions
 
 ## An example of ggplot2 {.smaller}
 
@@ -279,6 +300,16 @@ p + geom_boxplot()
 p + geom_violin()
 ```
 
+## `geom` function {.smaller}
+
+- Plot text on the graph: aes(x, y, label)
+
+```{r, echo=TRUE, fig.width=8, fig.height=4}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN.)) + 
+  facet_wrap(~SEASON)
+p + geom_text(aes(label = ABV), size = 2)
+```
+
 ## Multiple `geom` layers
 
 ```{r, echo=TRUE, fig.width=8, fig.height=4}
@@ -310,6 +341,10 @@ ggplot(data = nba.data, aes(x = SEASON, y = WIN.)) +
   geom_boxplot(width = 0.2) +
   geom_violin()
 ```
+
+## More options in `geom` function
+
+## Sometimes we need to transform the data set first
 
 ## Facet {.smaller}
 
@@ -390,7 +425,7 @@ p + geom_point(); p + geom_line(); p + geom_density_2d(); p + geom_smooth(method
 
 ## Scale: Shape and Linetype
 
-## Scale: linetype
+## Coordinate system
 
 ## Theme {.smaller}
 
@@ -401,6 +436,8 @@ p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN.)) +
   geom_point() + geom_smooth(method = "lm")
 p + theme_bw(); p + theme_classic(); p + theme_grey(); p + theme_minimal()
 ```
+
+## Design your own plot
 
 ## ggplot2 cheat sheet
 
