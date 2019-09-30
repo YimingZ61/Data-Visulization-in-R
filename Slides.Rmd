@@ -414,11 +414,13 @@ The scale functions control how the plot maps data values to the visual values o
 
 `scale_fill_manual`
 
+You can also specify the label of axis or legends in the scale funtion。
+
 ## Scale: General Purpose Scales
 
-- `scale_*_continuous`: change the scale for continuous data
+- `scale_*_continuous`: change the scale for continuous variable
 
-- `scale_*_discrete`: change the scale for discrete data
+- `scale_*_discrete`: change the scale for discrete variable
 
 - `scale_*_identity`: use values without scaling
 
@@ -426,13 +428,22 @@ The scale functions control how the plot maps data values to the visual values o
 
 ## Scale: General Purpose Scales
 
-```{r, fig.show = "hold", out.width = "35%", fig.align='default', echo=TRUE, fig.height=3.5, fig.width=7}
-p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN., color = REGION)) + 
-  geom_point()
-p + geom_point(); p + geom_line(); p + geom_density_2d(); p + geom_smooth(method = "lm")
+```{r, echo = TRUE}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN., color = REGION)) + geom_point()
+p + scale_x_continuous(name = "offensive rate", limits = c(97, 116)) +
+  scale_y_continuous(name = "winning rate", breaks= seq(0, 1, 0.1)) +
+  scale_color_manual(name = "region", labels = c("EAST", "WEST"), values = c("blue", "red"))
 ```
 
-## Scale: X and Y Axis
+## Scales: X and Y Axis
+
+- General purpose scales work for x and y axis.
+
+```{r, echo = TRUE}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN., color = REGION)) + geom_point()
+p + scale_x_reverse()
+```
+
 
 ## Scale: Color & Fill {.smaller}
 
@@ -447,8 +458,11 @@ p <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, color = WIN.)) + geom_p
 p + scale_color_gradient(low = "green", high = "red")
 ```
 
+## Scale: Size, Shape and Linetype
 
-## Scale: Shape and Linetype
+- General purpose scales also work for size, shape and linetype.
+
+- Reference for shape and linetype code: http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
 
 ## Coordinate system
 
@@ -464,13 +478,15 @@ p + theme_bw(); p + theme_classic(); p + theme_grey(); p + theme_minimal()
 
 ## Design your own plot
 
+- `theme` function is a powerful way to customize the non-data components of your plots: i.e. titles, labels, fonts, background, gridlines, and legends. See R help for details.
+
 ## ggplot2 cheat sheet
 
 - We don't need to memorize all the stuffs. The cheatsheet of ggplot2 gives us a tidy and detailed reference.
 
 https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
 
-- R help is also a great resource
+- R help is also a great resource.
 
 ## Practice 1
 
