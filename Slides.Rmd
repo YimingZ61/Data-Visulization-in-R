@@ -10,7 +10,7 @@ smaller: true
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, fig.width = 7, 
                       fig.height = 3.5, 
-                      fig.align = "center", warning = FALSE)
+                      fig.align = "center", warning = FALSE, cache = TRUE)
 
 package.required <- c("ggplot2", "ggrepel", "GGally", "ggvis", "ggExtra", "gganimate", "gridExtra")
 
