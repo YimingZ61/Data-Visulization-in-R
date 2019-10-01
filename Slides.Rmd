@@ -1,7 +1,7 @@
 ---
 title: "Data Visulization in R"
 author: "Yiming Zhang"
-date: "9/7/2019"
+date: "`r Sys.Date()`"
 output: ioslides_presentation
 widescreen: true
 smaller: true
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = FALSE, fig.width = 7,
                       fig.height = 3.5, 
                       fig.align = "center", warning = FALSE)
 
-package.required <- c("ggplot2", "ggrepel", "GGally", "ggvis", "ggExtra", "gganimate")
+package.required <- c("ggplot2", "ggrepel", "GGally", "ggvis", "ggExtra", "gganimate", "gridExtra")
 
 for(i in 1:length(package.required)){
   if(!package.required[i] %in% rownames(installed.packages())){
@@ -27,6 +27,8 @@ library(ggExtra)
 library(GGally)
 library(gganimate)
 library(ggvis)
+library(gridExtra)
+library(gifski)
 
 
 ## Read data
@@ -38,7 +40,7 @@ mean.win <- aggregate(WIN. ~ SEASON + REGION, FUN = mean, data = nba.data)
 
 practice1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
   geom_point(aes(color = REGION), shape = 1) + 
-  geom_text(data = nba.data[which(nba.data$WIN. >= 0.6), ], aes(label = ABV), size = 2) +
+  geom_text(data = nba.data[which(nba.data$WIN. >= 0.6), ], aes(label = ABV), size = 1.5) +
   geom_text(data = nba.data[which(nba.data$WIN. <= 0.3), ], aes(label = ABV), size = 1.5) +
   facet_wrap(~SEASON) +
   theme_bw() +
@@ -94,11 +96,17 @@ practice2 <- ggplot(data = nba.data, aes(x = REGION, y = WIN., color = REGION)) 
 
 - Multiple variables: Heatmap...
 
+- Think of your data and variable carefully, and choose the most appropriate statistical plot.
+
 ## Why we need data visualization
 
-- Better summary of statistics than table and text
+- Better summary of statistics than table and text.
 
-- A more interesting way to show your results
+- Easy to show a trend or a pattern in the data.
+
+- A more interesting way to catch your audiences' eyes.
+
+- For fun...
 
 ## Introduction to the data set {.smaller}
 
@@ -137,8 +145,6 @@ practice2
 ## But "bad" plots may....
 
 - be hard to read if labels and legends are not clear
-
-- be unfriendly to readers if it is too complicated
 
 - confuse people if it is not well-designed
 
@@ -197,18 +203,20 @@ ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
 ## ggplot2
 
 - Grammar of graphic
+
 - Both quick and complex plot in an easy way
+
 - Nice aesthetic settings
-- Great docummentation and tons of instructions
+
+- Great docummentation and tons of online instructions
 
 ## An example of ggplot2 {.smaller}
 
-The histogram of winning rate in different regular NBA seasons and region:
+The histogram of winning rate in different regular NBA seasons and regions:
 
 ```{r, echo=TRUE}
 ggplot(data = nba.data, aes(x = WIN.)) + 
-  geom_histogram(binwidth = 0.1, color = "black") +
-  facet_grid(REGION ~ SEASON) + theme_bw()
+  geom_histogram(binwidth = 0.1, color = "black") + facet_grid(REGION ~ SEASON)
 ```
 
 ## Comparing with `graphics` package
@@ -238,8 +246,21 @@ for(i in levels(nba.data$REGION)){
 }
 ```
 
-## Grammar of Graphics
+## Grammar of Graphics {.smaller}
 
+- Idea: graph is a combination of independent building blocks.
+
+- **Data** that you want to visualise and a set of **aesthetic** mappings describing how variables in the data are mapped to aesthetic attributes.
+
+- **Layers** made up of geometric elements and statistical transformation. Geometric objects, **geoms** for short, such as points, lines, polygons, etc. Statistical transformations, **stats** for short, summarise data in many useful ways.
+
+- The **scales** map values in the data space to values in an aesthetic space, whether it be colour, or size, or shape.
+
+- A **coordinate system**, coord for short, describes how data coordinates are mapped to the plane of the graphic.
+
+- A **facet** describes how to break up the data into subsets and how to display those subsets as small multiples. 
+
+- A **theme** which controls the finer points of display, like the font size and background colour. 
 
 ## The strat of plotting a graph {.smaller}
 
@@ -286,10 +307,9 @@ p + geom_point()
 
 - We can also specify `data` and `aes` in `geom` function. They don't have to be the same as those in `ggplot()`.
 
-```{r}
-p + geom_point(aes(x = DEFRTG, y = WIN.))
+```{r, echo = TRUE}
+ggplot() + geom_point(data = nba.data, aes(x = DEFRTG, y = WIN.))
 ```
-
 
 ## `geom` function {.smaller}
 
@@ -363,16 +383,18 @@ ggplot(data = nba.data, aes(x = SEASON, y = WIN.)) +
   geom_violin()
 ```
 
-## Sometimes we need to transform the data set first
+## Data transformation {.smaller}
 
-- We need to transform the data set to keep consistent with the structure of the aesthetics.
+- Sometimes we need to transform the data set to keep variables consistent with the structure of the aesthetics.
 
 - For instance, if we want to compare the mean of winning rate between seasons and regions...
 
-```{r}
+```{r, echo = TRUE}
 mean.win <- aggregate(WIN. ~ SEASON + REGION, FUN = mean, data = nba.data)
 head(mean.win)
 ```
+
+Then we can generate a plot to compare the mean of winning rate based on the new data set.
 
 ## More options in `geom` function
 
@@ -480,11 +502,16 @@ p <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, color = WIN.)) + geom_p
 p + scale_color_gradient(low = "green", high = "red")
 ```
 
-## Scale: Size, Shape and Linetype
+## Scale: Size, Shape and Linetype {.smaller}
 
 - General purpose scales also work for size, shape and linetype.
 
 - Reference for shape and linetype code: http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
+
+```{r, echo=TRUE}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, shape = REGION)) + geom_point()
+p + scale_shape_discrete("Region", solid = FALSE)
+```
 
 ## Coordinate system {.smaller}
 
@@ -511,9 +538,25 @@ p + theme_bw(); p + theme_classic(); p + theme_grey(); p + theme_minimal()
 
 - `theme` function is a powerful way to customize the non-data components of your plots: i.e. titles, labels, fonts, background, gridlines, and legends. See R help for details.
 
-## Arrange and save your plot
+## Arrange and save your plots {.smaller}
 
+- `grid.arrange` from `gridExtra` package can place multiple ggplot on a page
 
+```{r}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN.)) + 
+  geom_point() + geom_smooth(method = "lm")
+p1 <- p + theme_bw(); p2 <- p + theme_classic(); p3 <- p + theme_grey(); p4 <- p + theme_minimal()
+```
+
+```{r, echo = TRUE, fig.height=3}
+grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+```
+
+- `ggsave` can save the plot to your local drive.
+
+```{r, echo=T, eval=F}
+ggsave(p, filename = "", height = , width = , units = )
+```
 
 ## ggplot2 cheat sheet
 
@@ -532,7 +575,7 @@ practice1
 ## Practice 2
 
 ```{r, fig.width=9, fig.height=5.5}
-
+practice2
 ```
 
 # Extentions of ggplot2
@@ -569,17 +612,75 @@ ggcorr(data = nba.data[, c(3:7)])
 
 ## ggExtra
 
-```{r}
+- `ggMarginal`: Create a ggplot2 scatterplot with marginal density plots (default) or histograms, or add the marginal plots to an existing scatterplot.
+
+```{r, echo=T}
 p <- ggplot(nba.data, aes(x = OFFRTG, y = DEFRTG, color = REGION)) +
   geom_point() + theme_bw() + theme(legend.position = "bottom")
 ggMarginal(p, groupColour = TRUE, groupFill = TRUE)
 ```
 
-## ggrepel
+## ggrepel {.smaller}
+
+- `geom_text_repel` can solve the problem of overlapping labels when we plot text on the graph.
+
+```{r, echo=T}
+ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
+  geom_point(aes(color = REGION), shape = 1) + 
+  geom_text_repel(data = subset(nba.data, WIN. >= 0.6 | WIN. <= 0.3), 
+                  aes(label = ABV), size = 1.5, box.padding = 0.3) +
+  facet_wrap(~SEASON)
+```
+
+## ggrepel {.smaller}
+
+- `geom_label_repel` draws a rectangle underneath the text, making it easier to read.
+
+```{r, echo=T}
+ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) + 
+  geom_point(aes(color = REGION), shape = 1) + 
+  geom_label_repel(data = subset(nba.data, WIN. >= 0.6 | WIN. <= 0.3), 
+                  aes(label = ABV), size = 1.5, box.padding = 0.3) +
+  facet_wrap(~SEASON)
+```
 
 ## ggvis
 
 ## gganimate
+
+```{r, echo = T, eval = F}
+ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
+  geom_point(aes(color = REGION), shape = 1) + 
+  geom_text_repel(aes(label = ABV), size = 1.5, box.padding = 0.3) +
+  theme_bw() +
+  scale_y_reverse(limits = c(120, 97)) +
+  scale_color_manual(values = c("blue3", "red3")) +
+  # Here comes the gganimate specific bits
+  labs(title = 'SEASON: {closest_state}', x = 'OFFRTG', y = 'DEFRTG') +
+  theme(title = element_text(size = 5), 
+        text = element_text(size = 2)) +
+  transition_states(SEASON,
+                    transition_length = 2,
+                    state_length = 1)
+```
+
+## gganimate
+
+```{r, fig.width = 5.5, fig.height = 2.7}
+ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
+  geom_point(aes(color = REGION), shape = 1) + 
+  geom_text_repel(aes(label = ABV), size = 1.5, box.padding = 0.3) +
+  theme_bw() +
+  scale_y_reverse(limits = c(120, 97)) +
+  scale_color_manual(values = c("blue3", "red3")) +
+  # Here comes the gganimate specific bits
+  labs(title = 'SEASON: {closest_state}', x = 'OFFRTG', y = 'DEFRTG') +
+  theme(title = element_text(size = 5), 
+        text = element_text(size = 5)) +
+  transition_states(SEASON,
+                    transition_length = 2,
+                    state_length = 1)
+```
 
 ## Reference
 
