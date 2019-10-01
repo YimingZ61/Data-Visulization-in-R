@@ -12,9 +12,22 @@ knitr::opts_chunk$set(echo = FALSE, fig.width = 7,
                       fig.height = 3.5, 
                       fig.align = "center", warning = FALSE)
 
+package.required <- c("ggplot2", "ggrepel", "GGally", "ggvis", "ggExtra", "gganimate")
+
+for(i in 1:length(package.required)){
+  if(!package.required[i] %in% rownames(installed.packages())){
+    install.packages(package.required[i])
+  }
+}
+
 ## Load packages
 library(ggplot2)
 library(ggrepel)
+library(ggExtra)
+library(GGally)
+library(gganimate)
+library(ggvis)
+
 
 ## Read data
 nba.data <- read.csv("NBA_Team_Data.csv")
@@ -23,9 +36,8 @@ mean.win <- aggregate(WIN. ~ SEASON + REGION, FUN = mean, data = nba.data)
 
 
 
-practice1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
-  geom_point(aes(color = REGION),
-             shape = 1) + 
+practice1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
+  geom_point(aes(color = REGION), shape = 1) + 
   geom_text(data = nba.data[which(nba.data$WIN. >= 0.6), ], aes(label = ABV), size = 2) +
   geom_text(data = nba.data[which(nba.data$WIN. <= 0.3), ], aes(label = ABV), size = 1.5) +
   facet_wrap(~SEASON) +
@@ -34,11 +46,13 @@ practice1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
   scale_color_manual(values = c("blue3", "red3")) +
   theme()
 
-ggplot() + 
-  geom_dotplot(data = nba.data, aes(x = REGION, y = WIN.), 
-               binaxis = "y", stackdir = "center") +
-  geom_boxplot(data = nba.data, aes(x = REGION, y = WIN.)) +
-  facet_wrap(~SEASON)
+practice2 <- ggplot(data = nba.data, aes(x = REGION, y = WIN., color = REGION)) + 
+  geom_violin(fill = NA) + 
+  geom_boxplot(fill = NA, width = 0.35, outlier.shape = 1) +
+  geom_point(data = mean.win, aes(x = REGION, y = WIN.), shape = 5) +
+  facet_wrap(~SEASON, nrow = 1) +
+  scale_color_manual(values = c("blue3", "red3")) +
+  theme_bw()
 ```
 
 
@@ -110,7 +124,15 @@ head(nba.data)
 
 ## What information can we get from this plot?
 
+```{r,  fig.width=8, fig.height = 5}
+practice1
+```
+
 ## What information can we get from this plot?
+
+```{r,  fig.width=8, fig.height = 5}
+practice2
+```
 
 ## But "bad" plots may....
 
@@ -464,7 +486,16 @@ p + scale_color_gradient(low = "green", high = "red")
 
 - Reference for shape and linetype code: http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
 
-## Coordinate system
+## Coordinate system {.smaller}
+
+- `coord_*` function control the transformation of the coordinate systems
+
+```{r, fig.show = "hold", out.width = "35%", fig.align='default', echo=TRUE, fig.height=3.5, fig.width=7}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN.)) +
+  geom_point() + geom_smooth(method = "lm")
+p + coord_fixed(ratio = 20); p + coord_flip(); p + coord_trans(y = "sqrt"); p + coord_polar()
+```
+
 
 ## Theme {.smaller}
 
@@ -479,6 +510,10 @@ p + theme_bw(); p + theme_classic(); p + theme_grey(); p + theme_minimal()
 ## Design your own plot
 
 - `theme` function is a powerful way to customize the non-data components of your plots: i.e. titles, labels, fonts, background, gridlines, and legends. See R help for details.
+
+## Arrange and save your plot
+
+
 
 ## ggplot2 cheat sheet
 
@@ -506,7 +541,7 @@ practice1
 
 - GGally: An extention to reduce the complexity of combining geometric objects with transformed data
 
-- ggmap: Plot map based on the grammar of graphics
+- ggExtra: A package which can add marginal density plots or histograms to ggplot2 scatterplots.
 
 - ggrepel: A convenient package for `geom_text()`
 
@@ -518,11 +553,33 @@ practice1
 
 ## GGally
 
-## ggmap
+- `ggpairs`: Make a matrix of plots with a given data set.
+
+```{r, echo =  TRUE, fig.width=8, fig.height=4, warning=FALSE}
+ggpairs(data = nba.data, 3:7)
+```
+
+## GGally
+
+- `ggcorr`: plot a correlation matrix (heatmap) with ggplot2
+
+```{r, echo=TRUE, fig.width=8, fig.height=4}
+ggcorr(data = nba.data[, c(3:7)])
+```
+
+## ggExtra
+
+```{r}
+p <- ggplot(nba.data, aes(x = OFFRTG, y = DEFRTG, color = REGION)) +
+  geom_point() + theme_bw() + theme(legend.position = "bottom")
+ggMarginal(p, groupColour = TRUE, groupFill = TRUE)
+```
 
 ## ggrepel
 
 ## ggvis
+
+## gganimate
 
 ## Reference
 
