@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = FALSE, fig.width = 7,
                       fig.height = 3.5, 
                       fig.align = "center", warning = FALSE, cache = TRUE)
 
-package.required <- c("ggplot2", "ggrepel", "GGally", "ggvis", "ggExtra", "gganimate", "gridExtra", "gifski")
+package.required <- c("ggplot2", "ggrepel", "GGally", "ggExtra", "gganimate", "gridExtra", "gifski")
 
 for(i in 1:length(package.required)){
   if(!package.required[i] %in% rownames(installed.packages())){
@@ -26,7 +26,6 @@ library(ggrepel)
 library(ggExtra)
 library(GGally)
 library(gganimate)
-library(ggvis)
 library(gridExtra)
 library(gifski)
 
@@ -307,9 +306,9 @@ p
 
 - y: y axis
 
-- color: color of the boundary of a figure
+- color: color of the boundary of a symbol
 
-- fill: color of the inside of a figure
+- fill: color of the inside of a symbol
 
 - shape: shape of points, solid point, circle, triangle...
 
@@ -493,6 +492,13 @@ You can also specify the label of axis or legends in the scale funtion。
 
 ```{r, echo = TRUE}
 p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN., color = REGION)) + geom_point()
+p
+```
+
+## Scale: General Purpose Scales
+
+```{r, echo = TRUE}
+p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN., color = REGION)) + geom_point()
 p + scale_x_continuous(name = "offensive rate", limits = c(97, 116)) +
   scale_y_continuous(name = "winning rate", breaks= seq(0, 1, 0.1)) +
   scale_color_manual(name = "region", labels = c("EAST", "WEST"), values = c("blue", "red"))
@@ -554,6 +560,8 @@ p + theme_bw(); p + theme_classic(); p + theme_grey(); p + theme_minimal()
 ```
 
 ## Design your own plot
+
+- `labs` function can set the title, subtitle and caption of your plot.
 
 - `theme` function is a powerful way to customize the non-data components of your plots: i.e. titles, labels, fonts, background, gridlines, and legends. See R help for details.
 
