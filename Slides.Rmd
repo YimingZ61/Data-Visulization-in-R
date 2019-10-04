@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = FALSE, fig.width = 7,
                       fig.height = 3.5, 
                       fig.align = "center", warning = FALSE, cache = TRUE)
 
-package.required <- c("ggplot2", "ggrepel", "GGally", "ggvis", "ggExtra", "gganimate", "gridExtra")
+package.required <- c("ggplot2", "ggrepel", "GGally", "ggvis", "ggExtra", "gganimate", "gridExtra", "gifski")
 
 for(i in 1:length(package.required)){
   if(!package.required[i] %in% rownames(installed.packages())){
@@ -40,21 +40,33 @@ mean.win <- aggregate(WIN. ~ SEASON + REGION, FUN = mean, data = nba.data)
 
 practice1 <- ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
   geom_point(aes(color = REGION), shape = 1) + 
-  geom_text(data = nba.data[which(nba.data$WIN. >= 0.6), ], aes(label = ABV), size = 1.5) +
+  geom_text(data = subset(nba.data, WIN. < 0.3 | WIN. > 0.6),
+            aes(label = ABV), size = 1.5) +
   geom_text(data = nba.data[which(nba.data$WIN. <= 0.3), ], aes(label = ABV), size = 1.5) +
   facet_wrap(~SEASON) +
   theme_bw() +
-  scale_y_reverse(limits = c(120, 97)) +
-  scale_color_manual(values = c("blue3", "red3")) +
-  theme()
+  scale_x_continuous("Offensive Rate") +
+  scale_y_reverse("Defensive Rate", limits = c(120, 97)) +
+  scale_color_manual("Region" ,values = c("blue3", "red3")) +
+  scale_size_continuous("Winning Rate", breaks = c(0.2, 0.4, 0.6)) +
+  theme(legend.position = "bottom",
+    panel.grid.minor = element_blank())
 
-practice2 <- ggplot(data = nba.data, aes(x = REGION, y = WIN., color = REGION)) + 
-  geom_violin(fill = NA) + 
-  geom_boxplot(fill = NA, width = 0.35, outlier.shape = 1) +
-  geom_point(data = mean.win, aes(x = REGION, y = WIN.), shape = 5) +
+practice2 <- ggplot(data = nba.data, aes(x = REGION, y = WIN.,
+                      color = REGION, fill = REGION)) + 
+  geom_jitter(alpha = 0.2, size = 2, width = 0.2, height = 0.03) +
+  geom_violin(alpha = 0.2) + 
+  geom_boxplot(width = 0.35, outlier.shape = 1, alpha = 0.2) +
+  geom_point(data = mean.win, aes(x = REGION, y = WIN.,
+                                  shape = "Mean Winning Rate"), color = "black") +
   facet_wrap(~SEASON, nrow = 1) +
-  scale_color_manual(values = c("blue3", "red3")) +
-  theme_bw()
+  scale_y_continuous("Winning Rate", breaks = seq(0,1,0.1)) +
+  scale_color_manual("Region", values = c("blue3", "red3")) +
+  scale_fill_manual("Region", values = c("blue3", "red3")) +
+  scale_shape_manual("", values = 5) +
+  theme_bw() + 
+  theme(legend.position = "bottom",
+    panel.grid.major.y = element_blank())
 ```
 
 
@@ -66,7 +78,7 @@ practice2 <- ggplot(data = nba.data, aes(x = REGION, y = WIN., color = REGION)) 
 
 - Practices with ggplot2
 
-- Introduction to the extension of ggplot2
+- Introduction to other graphics package in R
 
 # General introduction to data visualization
 
@@ -79,8 +91,10 @@ practice2 <- ggplot(data = nba.data, aes(x = REGION, y = WIN., color = REGION)) 
   + Find correlation between variables
   
   + Regression analysis
+  
+- Statistical analysis
 
-- Report statistical results
+- Report your results
 
 - Communicate with non-statisticians
 
@@ -96,7 +110,7 @@ practice2 <- ggplot(data = nba.data, aes(x = REGION, y = WIN., color = REGION)) 
 
 - Multiple variables: Heatmap...
 
-- Think of your data and variable carefully, and choose the most appropriate statistical plot.
+- Think of your data and variables carefully, and choose the most appropriate statistical plot.
 
 ## Why we need data visualization
 
@@ -132,14 +146,14 @@ head(nba.data)
 
 ## What information can we get from this plot?
 
-```{r,  fig.width=8, fig.height = 5}
-practice1
+```{r,  fig.width=9, fig.height = 5.5}
+practice1  
 ```
 
 ## What information can we get from this plot?
 
-```{r,  fig.width=8, fig.height = 5}
-practice2
+```{r,  fig.width=9, fig.height = 5.5}
+practice2  
 ```
 
 ## But "bad" plots may....
@@ -194,9 +208,21 @@ ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG)) +
 
 - `leaflet`: Interactive maps
 
-## Basic graphical package in R
+## `graphics` package in R
 
-## The `plot` function 
+```{r, fig.width=6, fig.height=4, out.width="50%", fig.align='default', echo=T}
+plot(OFFRTG ~ DEFRTG, data = nba.data);  plot(WIN. ~ SEASON, data = nba.data)
+```
+
+## Two types of functions
+
+- Fuctions to create complete plots:
+
+  + `plot()`, `boxplot()`, `hist()`...
+  
+- Functions to add elements to an existing plot:
+
+  + `points()`, `lines()`, `legend()`...
 
 # Introduction to ggplot2
 
@@ -396,13 +422,6 @@ head(mean.win)
 
 Then we can generate a plot to compare the mean of winning rate based on the new data set.
 
-## More options in `geom` function
-
-```{r}
-
-```
-
-
 ## Facet {.smaller}
 
 - Facet function can help you make panel plot very easily
@@ -569,16 +588,16 @@ https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
 ## Practice 1
 
 ```{r, fig.width=9, fig.height=5.5}
-practice1
+practice1  
 ```
 
 ## Practice 2
 
 ```{r, fig.width=9, fig.height=5.5}
-practice2
+practice2  
 ```
 
-# Extentions of ggplot2
+# Other graphics packages in R
 
 ## Extentions of ggplot2
 
@@ -587,8 +606,6 @@ practice2
 - ggExtra: A package which can add marginal density plots or histograms to ggplot2 scatterplots.
 
 - ggrepel: A convenient package for `geom_text()`
-
-- ggvis: Interactive plots based on grammar of graphics
 
 - gganimate: A grammar of animated graphics
 
@@ -644,7 +661,23 @@ ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
   facet_wrap(~SEASON)
 ```
 
-## ggvis
+## gganimate
+
+```{r, fig.width = 5.5, fig.height = 2.7}
+ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
+  geom_point(aes(color = REGION), shape = 1) + 
+  geom_text_repel(aes(label = ABV), size = 1.5, box.padding = 0.3) +
+  theme_bw() +
+  scale_y_reverse(limits = c(120, 97)) +
+  scale_color_manual(values = c("blue3", "red3")) +
+  # Here comes the gganimate specific bits
+  labs(title = 'SEASON: {closest_state}', x = 'OFFRTG', y = 'DEFRTG') +
+  theme(title = element_text(size = 5), 
+        text = element_text(size = 5)) +
+  transition_states(SEASON,
+                    transition_length = 2,
+                    state_length = 1)
+```
 
 ## gganimate
 
@@ -659,24 +692,6 @@ ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
   labs(title = 'SEASON: {closest_state}', x = 'OFFRTG', y = 'DEFRTG') +
   theme(title = element_text(size = 5), 
         text = element_text(size = 2)) +
-  transition_states(SEASON,
-                    transition_length = 2,
-                    state_length = 1)
-```
-
-## gganimate
-
-```{r, fig.width = 5.5, fig.height = 2.7}
-ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
-  geom_point(aes(color = REGION), shape = 1) + 
-  geom_text_repel(aes(label = ABV), size = 1.5, box.padding = 0.3) +
-  theme_bw() +
-  scale_y_reverse(limits = c(120, 97)) +
-  scale_color_manual(values = c("blue3", "red3")) +
-  # Here comes the gganimate specific bits
-  labs(title = 'SEASON: {closest_state}', x = 'OFFRTG', y = 'DEFRTG') +
-  theme(title = element_text(size = 5), 
-        text = element_text(size = 5)) +
   transition_states(SEASON,
                     transition_length = 2,
                     state_length = 1)
