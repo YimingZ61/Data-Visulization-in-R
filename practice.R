@@ -106,6 +106,15 @@ p + theme_classic()
 p + theme_grey()
 p + theme_minimal()
 
+## Practice 1
+
+
+
+## Practice 2
+
+
+
+
 ## Arrange and save your plots
 p <- ggplot(data = nba.data, aes(x = OFFRTG, y = WIN.)) + 
   geom_point() + geom_smooth(method = "lm")
