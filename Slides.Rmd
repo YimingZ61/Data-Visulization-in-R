@@ -1,7 +1,7 @@
 ---
 title: "Data Visulization in R"
 author: "Yiming Zhang"
-date: "`r Sys.Date()`"
+date: "10/05/2019"
 output: ioslides_presentation
 widescreen: true
 smaller: true
@@ -10,7 +10,7 @@ smaller: true
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, fig.width = 7, 
                       fig.height = 3.5, 
-                      fig.align = "center", warning = FALSE, cache = TRUE)
+                      fig.align = "center", warning = FALSE, cache = T)
 
 package.required <- c("ggplot2", "ggrepel", "GGally", "ggExtra", "gganimate", "gridExtra", "gifski")
 
@@ -605,7 +605,7 @@ practice1
 practice2  
 ```
 
-# Other graphics packages in R
+# Other graphical packages in R
 
 ## Extentions of ggplot2
 
@@ -705,6 +705,14 @@ ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
                     state_length = 1)
 ```
 
-## Reference
+## Summary
+
+- Introduction to data visualization
+
+- Grammar of graphics: ggplot2
+
+- Practices with basketball game data
+
+- Extensions of ggplot2
 
 # Thanks for listening!
