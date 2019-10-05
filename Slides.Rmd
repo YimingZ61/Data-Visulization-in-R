@@ -593,6 +593,10 @@ https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
 
 - R help is also a great resource.
 
+- [Top 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)
+
+- Wickham, H. (2016). ggplot2: elegant graphics for data analysis. Springer.
+
 ## Practice 1
 
 ```{r, fig.width=9, fig.height=5.5}
