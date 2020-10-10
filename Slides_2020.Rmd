@@ -1,5 +1,5 @@
 ---
-title: "Data Visulization in R"
+title: "Data Visualization in R"
 author: "Yiming Zhang"
 date: "10/10/2020"
 output: 
@@ -71,7 +71,7 @@ summary.dino <- dinodata %>%
  
  + A case study using NBA data
 
-- Useful packages and extentions for ggplot2
+- Useful packages and extensions for ggplot2
 
 ## WHEN and WHY to visualize data
 
@@ -207,17 +207,17 @@ for(i in levels(sub.dt$REGION)){
 
 - Idea: graph is a combination of independent building blocks.
 
-- **Data** that you want to visualise and a set of **aesthetic** mappings describing how variables in the data are mapped to aesthetic attributes.
+- **Data** that you want to visualize and a set of **aesthetic** mappings describing how variables in the data are mapped to aesthetic attributes.
 
-- **Layers** made up of geometric elements and statistical transformation. Geometric objects, **geoms** for short, such as points, lines, polygons, etc. Statistical transformations, **stats** for short, summarise data in many useful ways.
+- **Layers** made up of geometric elements and statistical transformation. Geometric objects, **geoms** for short, such as points, lines, polygons, etc. Statistical transformations, **stats** for short, summarize data in many useful ways.
 
-- The **scales** map values in the data space to values in an aesthetic space, whether it be colour, or size, or shape.
+- The **scales** map values in the data space to values in an aesthetic space, whether it be color, or size, or shape.
 
 - A **coordinate system**, coord for short, describes how data coordinates are mapped to the plane of the graphic.
 
 - A **facet** describes how to break up the data into subsets and how to display those subsets as small multiples. 
 
-- A **theme** which controls the finer points of display, like the font size and background colour. 
+- A **theme** which controls the finer points of display, like the font size and background color. 
 
 ## The start of plotting a graph {.smaller}
 
@@ -254,7 +254,7 @@ p
 
 - Geometries are the actual graphical elements displayed in a plot. They can visualize the mapping variables (specified in `aes()`) from the data.
 
-- We use `+` to connect multiple geometrics functions
+- We use `+` to connect multiple geometry functions
 
 ```{r, echo = TRUE}
 p + geom_point()
@@ -365,9 +365,9 @@ p + facet_grid(REGION ~ SEASON)
 
 - The format of scale functions is always `scale_element1_element2`. The first element represents the aesthetics, and the second element represents the characteristics of variables.
 
-- You can also specify the label of axis or legends in the scale funtion.
+- You can also specify the label of axis or legends in the scale function.
 
-- R color cheatsheet: https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/colorPaletteCheatsheet.pdf
+- R color cheat sheet: https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/colorPaletteCheatsheet.pdf
 
 ## Scale
 
@@ -388,13 +388,13 @@ p + scale_x_continuous(name = "offensive rate", limits = c(97, 116)) +
 
 - `labs` function can set the title, subtitle and caption of your plot.
 
-- `theme` function is a powerful way to customize the non-data components of your plots: i.e. titles, labels, fonts, background, gridlines, and legends. See R help for details.
+- `theme` function is a powerful way to customize the non-data components of your plots: i.e. titles, labels, fonts, background, grid lines, and legends. See R help for details.
 
 - `ggsave` can save the plot to your local drive.
 
 ## ggplot2 online documents
 
-- We don't need to memorize all the stuffs. The cheatsheet of ggplot2 gives us a tidy and detailed reference.
+- We don't need to memorize all the stuffs. The cheat sheet of ggplot2 gives us a tidy and detailed reference.
 
 https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
 
@@ -431,13 +431,13 @@ ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
 ```
 
 
-## Useful packages or extentions for ggplot2
+## Useful packages or extensions for ggplot2
 
 - gridExtra: A package can help you arrange multiple plots on a page
 
-- GGally: An extention to reduce the complexity of combining geometric objects with transformed data
+- GGally: An extension to reduce the complexity of combining geometric objects with transformed data
 
-- ggExtra: A package which can add marginal density plots or histograms to ggplot2 scatterplots.
+- ggExtra: A package which can add marginal density plots or histograms to ggplot2 scatter plots.
 
 - ggrepel: A convenient package for `geom_text()`
 
@@ -458,7 +458,7 @@ ggcorr(data = nba.data[, 3:7])
 
 ## ggExtra
 
-- `ggMarginal`: Create a ggplot2 scatterplot with marginal density plots (default) or histograms, or add the marginal plots to an existing scatterplot.
+- `ggMarginal`: Create a ggplot2 scatter plot with marginal density plots (default) or histograms, or add the marginal plots to an existing scatter plot.
 
 ```{r, echo=T}
 p <- ggplot(nba.data, aes(x = OFFRTG, y = DEFRTG, color = REGION)) +
