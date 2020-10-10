@@ -443,7 +443,7 @@ ggplot(data = nba.data, aes(x = OFFRTG, y = DEFRTG, size = WIN.)) +
 
 - gganimate: A grammar of animated graphics
 
-- more information: http://www.ggplot2-exts.org/gallery/
+- more information: https://exts.ggplot2.tidyverse.org/gallery/
 
 ## GGally
 
